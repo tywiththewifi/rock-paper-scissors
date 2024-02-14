@@ -8,60 +8,79 @@
 <body>
     <p style="font-weight: bold; font-size: 30px;">This is a console based game of 'Rock, Paper, Scissors' <br> In order to play, right click anywhere in the browser, click inspect, type playGame() into the console and press enter!</p>
     
+    <button>Rock</button>
+    <button>Paper</button>
+    <button>Scissors</button>
+
+    <p id="gamePlay"></p>
+
 </body>
 <script>
-// Create a function named getComputerChoice that will randomly return 'Rock', 'Paper', or 'Scissors'.
-// Write a function that plays a single round of rock paper scissors that takes two parameters: the playerSelection and computerSelection
-// Then return a string that declares the winner or tie of the round like so: "You lose! Paper beats rock"
-// Write new function called playGame() 
-// Use the previous function inside of this one to play a five round game that keeps score and reports a winner/loser at the end
 
+// Define an array name selections to hole [Rock, Paper, Scissors], define playerScore and computerScore variables
 const selections = ["Rock", "Paper", "Scissors"];
 let playerScore = 0;
 let computerScore = 0;
+const buttons = document.querySelectorAll('button');
+const para = document.querySelector('#gamePlay');
 
-// Play rounds until one hits the score of 5
-function playGame() {
-    while ((playerScore < 5) && (computerScore < 5)) {
+console.log(para);
 
-        // Get random selection of either Rock, Paper, or Scissors and assign it to the computerSelection variable
-        function getComputerSelection() {
-            let randomNumber = Math.floor(Math.random() * selections.length);
-            let computerSelection = selections[randomNumber];
-            return computerSelection;
-        }
-        let computerSelection = getComputerSelection();
+// Click Event Listener for buttons, triggers game
+buttons.forEach(button => {
+    button.addEventListener('click', () => {
+        
+        const playerSelection = button.textContent;
 
-        // Use prompt() and assign it to playerSelection variable, and then capitalize the input
-        let playerSelection = prompt("Rock, Paper, or Scissors?");  
-        playerSelection = playerSelection[0].toUpperCase() + playerSelection.slice(1).toLowerCase(); 
+        const computerSelection = getComputerSelection();
 
-        // Play 1 Round
-        playRound(playerSelection, computerSelection);
+        if ((playerScore < 5) && (computerScore < 5)) {
+            playRound(playerSelection, computerSelection);
+            } else {
+                endGame();
+            };
+    });
+});
+
+
+// Get random selection of either Rock, Paper, or Scissors and assign it to the computerSelection variable
+function getComputerSelection() {
+    let randomNumber = Math.floor(Math.random() * selections.length);
+    let computerSelection = selections[randomNumber];
+    return computerSelection;
+}
+
+// Print winner and scores
+function endGame() {
+    if (playerScore > computerScore) {
+        para.textContent = `Congrats you won ${playerScore} to ${computerScore}`;
+    } else if (playerScore < computerScore) {
+        para.textContent = `You lost ${playerScore} to ${computerScore}`;
     }
 
-    // Print winner and scores
-if (playerScore > computerScore) {
-    console.log(`Congrats you won ${playerScore} to ${computerScore}`);
-} else if (playerScore < computerScore) {
-    console.log(`You lost ${playerScore} to ${computerScore}`);
-}
-};
+    buttons.forEach(button => {
+        button.disabled = true;
+    });
+
+    };
 
 // Game round logic goes here
 function playRound(playerSelection, computerSelection) {
     if (playerSelection === computerSelection) {
-        console.log(`It's a tie, you both chose ${playerSelection}`)
+        para.textContent = `It's a tie, you both chose ${playerSelection}\n`;
+
     } else if ((playerSelection === `Rock` && computerSelection === `Scissors`) || (playerSelection === 'Paper' && computerSelection === `Rock`) || (playerSelection === `Scissors` && computerSelection === `Paper`)) {
-        console.log(`Congrats your ${playerSelection} beat the computer's ${computerSelection}`);
+        para.textContent = `Congrats your ${playerSelection} beat the computer's ${computerSelection}\n`;
         playerScore++;
+
     } else {
-        console.log(`Computer's ${computerSelection} beat your ${playerSelection}`);
+        para.textContent = `Computer's ${computerSelection} beat your ${playerSelection}\n`;
         computerScore++;
-    }
+        
+    }   
+    para.textContent += ` Player Score: ${playerScore} Computer Score: ${computerScore}`;
+
 }
-
-
 
 </script>
 </html>
